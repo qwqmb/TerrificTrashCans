@@ -58,6 +58,7 @@ public class TTCFluidHandler implements IFluidHandler, INBTSerializable<Compound
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
+        if (resource.isEmpty()) return 0;
         FluidStack copy = resource.copy();
         for (int i = 0; i < tanks.length; i++) {
             copy.shrink(tanks[i].fill(copy, action));
@@ -67,6 +68,7 @@ public class TTCFluidHandler implements IFluidHandler, INBTSerializable<Compound
 
     @Override
     public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+        if (resource.isEmpty()) return FluidStack.EMPTY;
         FluidStack copy = resource.copy();
         for (int i = tanks.length - 1; i >= 0; i--) {
             copy.shrink(tanks[i].drain(copy, action).getAmount());
