@@ -77,7 +77,9 @@ public class TTCFluidHandler implements IFluidHandler, INBTSerializable<Compound
     @Override
     public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
         int drained = 0;
-        Fluid fluid = Arrays.stream(tanks).map(t -> t.fluid.getFluid()).filter(f -> f != Fluids.EMPTY).toList().get(getTanks() - 1);
+        var fluids = Arrays.stream(tanks).map(t -> t.fluid.getFluid()).filter(f -> f != Fluids.EMPTY).toList();
+        if (fluids.isEmpty()) return FluidStack.EMPTY;
+        Fluid fluid = fluids.get(fluids.size() - 1);
         for (int i = tanks.length - 1; i >= 0; i--) {
             if(tanks[i].getFluid().getFluid().isSame(fluid)) {
                 FluidStack stack = tanks[i].drain(maxDrain - drained, action);
